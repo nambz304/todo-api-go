@@ -1,28 +1,32 @@
 package repository
 
 import (
+	"fmt"
 	"os"
 	"todo-api/models"
 
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
 func ConnectDB() {
-	dsn := os.Getenv("DATABASE_URL") // Heroku tự cung cấp env này
-
+	dsn := os.Getenv("DATABASE_URL") // Render tự set
 	if dsn == "" {
-		dsn = "root:password@tcp(127.0.0.1:3306)/todo_db?..." // fallback local
+		// Fallback local MySQL (test trên máy bạn)
+		dsn = "root:nam123456!@tcp(127.0.0.1:3306)/todo_db?charset=utf8mb4&parseTime=True&loc=Local"
 	}
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	if err != nil {
-		panic("Failed to connect database")
-	}
-	DB = db
-	DB.AutoMigrate(&models.Todo{}) // Tạo bảng tự động
 
+	// Dùng Postgres driver
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic("Failed to connect database: " + err.Error())
+	}
+
+	DB = db
+	DB.AutoMigrate(&models.Todo{}) // Tự tạo bảng todos
+	fmt.Println("Connected to database successfully!")
 }
 
 func CreateTodo(todo *models.Todo) error {
