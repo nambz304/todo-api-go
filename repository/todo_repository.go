@@ -2,7 +2,6 @@ package repository
 
 import (
 	"fmt"
-	"os"
 	"todo-api/models"
 
 	"gorm.io/driver/postgres"
