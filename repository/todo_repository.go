@@ -12,11 +12,7 @@ import (
 var DB *gorm.DB
 
 func ConnectDB() {
-	dsn := os.Getenv("DATABASE_URL") // Render tự set
-	if dsn == "" {
-		// Fallback local MySQL (test trên máy bạn)
-		dsn = "root:nam123456!@tcp(127.0.0.1:3306)/todo_db?charset=utf8mb4&parseTime=True&loc=Local"
-	}
+	dsn := "postgresql://todo_db_fz9m_user:dwTBvvliy8V2kbXwvqS6PZ6nQhZqtkH6@dpg-d59psqm3jp1c73c798gg-a.singapore-postgres.render.com/todo_db_fz9m"
 
 	// Dùng Postgres driver
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
